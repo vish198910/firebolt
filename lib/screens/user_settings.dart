@@ -8,7 +8,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class UserSettings extends StatefulWidget {
   final data;
-  UserSettings({this.data});
+  final email;
+  final password;
+  final confirmPassword;
+  UserSettings({this.data, this.email, this.password, this.confirmPassword});
   @override
   _UserSettingsState createState() => _UserSettingsState();
 }
@@ -73,7 +76,7 @@ class _UserSettingsState extends State<UserSettings> {
     DateTime birthDate,
     int gender,
   }) {
-    FirebaseFirestore.instance.collection("users").doc(widget.data.email).set(
+    FirebaseFirestore.instance.collection("users").doc(widget.email).set(
       {
         "name": name,
         "height": height,
@@ -286,7 +289,26 @@ class _UserSettingsState extends State<UserSettings> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      try {
+                        if (widget.password == widget.confirmPassword) {
+                          UserCredential userCredential = await FirebaseAuth
+                              .instance
+                              .createUserWithEmailAndPassword(
+                                  email: widget.email,
+                                  password: widget.password);
+                          print(userCredential.toString());
+                        } else {}
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'weak-password') {
+                          print('The password provided is too weak.');
+                        } else if (e.code == 'email-already-in-use') {
+                          print('The account already exists for that email.');
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
+
                       addUserData(
                           name: nameController.text,
                           height: _selectedItem,

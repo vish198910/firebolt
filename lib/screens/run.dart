@@ -66,6 +66,7 @@ class _MapViewState extends State<MapView> {
 
   bool runStarted = false;
 
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Method for retrieving the current location
@@ -260,6 +261,7 @@ class _MapViewState extends State<MapView> {
 
         // Calculating the total distance by adding the distance
         // between small segments
+        
         for (int i = 0; i < polylineCoordinates.length - 1; i++) {
           totalDistance += _coordinateDistance(
             polylineCoordinates[i].latitude,
@@ -467,11 +469,11 @@ class _MapViewState extends State<MapView> {
                     children: [
                       GestureDetector(
                         onTap: () {
+                          _getFinalLocation();
                           setState(() {
-                            _getFinalLocation();
                             runStarted = false;
-                            setMarkers();
                           });
+                          setMarkers();
                         },
                         child: Container(
                           child: Center(
@@ -508,8 +510,8 @@ class _MapViewState extends State<MapView> {
                     children: [
                       GestureDetector(
                         onTap: () {
+                          _getCurrentLocation();
                           setState(() {
-                            _getCurrentLocation();
                             _initialPosition = _currentPosition;
                             runStarted = true;
                           });
@@ -522,8 +524,8 @@ class _MapViewState extends State<MapView> {
                                   TextStyle(color: Colors.white, fontSize: 18),
                             ),
                           ),
-                          width: 150,
-                          height: 150,
+                          width: 120,
+                          height: 120,
                           decoration: new BoxDecoration(
                             gradient: RadialGradient(colors: [
                               Colors.black,

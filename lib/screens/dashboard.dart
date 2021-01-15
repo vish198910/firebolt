@@ -20,12 +20,7 @@ class _DashboardPageState extends State<DashboardPage> {
   UserManagement user = new UserManagement();
 
   int _currentIndex = 0;
-  List<Widget> _children = [
-    Today(),
-    Run(),
-    Friends(),
-    Profile(),
-  ];
+  List<Widget> _children = [];
 
   void onTabTapped(int index) {
     setState(() {
@@ -51,6 +46,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    _children = [
+      Today(),
+      Run(),
+      Friends(),
+      Profile(email: widget.data.email),
+    ];
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

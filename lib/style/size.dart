@@ -1,0 +1,1 @@
+double appBarSize = 20;

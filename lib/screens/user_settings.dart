@@ -5,6 +5,7 @@ import 'package:firebolt/services/usermngmt.dart';
 import 'package:firebolt/style/color.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:math';
 
 class UserSettings extends StatefulWidget {
   final data;
@@ -27,23 +28,90 @@ class _UserSettingsState extends State<UserSettings> {
   Color enabledColor = boltPrimaryColor;
 
   DateTime birthdate = DateTime.now();
-  List<double> heightItems = [1, 2, 3, 4];
+  List<double> heightItems = [];
   List<double> _weightItems = [];
 
-  List<DropdownMenuItem<double>> _dropdownMenuItems;
-  double _selectedItem;
+  List<DropdownMenuItem<double>> _dropdownHeightItems;
+  double _selectedHeight;
+  List<DropdownMenuItem<double>> _dropdownWeightItems;
+  double _selectedWeight;
 
-  List<double> loadHeights() {}
+  double roundDouble(double value, int places) {
+    double mod = pow(10.0, places);
+    return ((value * mod).round().toDouble() / mod);
+  }
+
+  void loadHeights(int scale) async {
+    heightItems = [];
+    double heightValue = 0;
+    int counter = 0;
+    if (scale == 0) {
+      while (counter <= 12) {
+        for (int i = 0; i < 12; i++) {
+          heightItems.add(roundDouble(counter + heightValue, 1));
+          heightValue += 0.1;
+        }
+        counter++;
+        heightValue = 0;
+      }
+    } else {
+      for (int i = 0; i < 210; i++) {
+        heightItems.add(roundDouble(i * 1.0, 1));
+      }
+    }
+    _dropdownHeightItems = buildHeights(heightItems);
+    _selectedHeight = _dropdownHeightItems[0].value;
+  }
+
+  void loadWeights(int scale) async {
+    _weightItems = [];
+    double weightValue = 0;
+    int counter = 0;
+    if (scale == 0) {
+      while (counter <= 220) {
+        for (int i = 0; i < 10; i++) {
+          _weightItems.add(roundDouble(counter + weightValue, 1));
+          weightValue += 0.1;
+        }
+        counter++;
+        weightValue = 0;
+      }
+    } else {
+      while (counter <= 100) {
+        for (int i = 0; i < 10; i++) {
+          _weightItems.add(roundDouble(counter + weightValue, 1));
+          weightValue += 0.1;
+        }
+        counter++;
+        weightValue = 0;
+      }
+    }
+    _dropdownWeightItems = buildWeights(_weightItems);
+    _selectedWeight = _dropdownWeightItems[0].value;
+  }
 
   void initState() {
     super.initState();
     genderType = -1;
     unitType = 0;
-    _dropdownMenuItems = buildHeights(heightItems);
-    _selectedItem = _dropdownMenuItems[0].value;
+    loadHeights(unitType);
+    loadWeights(unitType);
   }
 
   List<DropdownMenuItem<double>> buildHeights(List listItems) {
+    List<DropdownMenuItem<double>> items = List();
+    for (double listItem in listItems) {
+      items.add(
+        DropdownMenuItem(
+          child: Text(listItem.toString()),
+          value: listItem,
+        ),
+      );
+    }
+    return items;
+  }
+
+  List<DropdownMenuItem<double>> buildWeights(List listItems) {
     List<DropdownMenuItem<double>> items = List();
     for (double listItem in listItems) {
       items.add(
@@ -125,15 +193,20 @@ class _UserSettingsState extends State<UserSettings> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Height"),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton<double>(
-                        value: _selectedItem,
-                        items: _dropdownMenuItems,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedItem = value;
-                          });
-                        }),
+                  Row(
+                    children: [
+                      Text("${unitType == 0 ? " ft" : "cm"}  "),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<double>(
+                            value: _selectedHeight,
+                            items: _dropdownHeightItems,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedHeight = value;
+                              });
+                            }),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -143,15 +216,20 @@ class _UserSettingsState extends State<UserSettings> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Weight"),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton<double>(
-                        value: _selectedItem,
-                        items: _dropdownMenuItems,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedItem = value;
-                          });
-                        }),
+                  Row(
+                    children: [
+                      Text("${unitType == 0 ? "lb" : "kg"}  "),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<double>(
+                            value: _selectedWeight,
+                            items: _dropdownWeightItems,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedWeight = value;
+                              });
+                            }),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -243,6 +321,8 @@ class _UserSettingsState extends State<UserSettings> {
                             onPressed: () {
                               setState(() {
                                 unitType = 1;
+                                loadHeights(unitType);
+                                loadWeights(unitType);
                               });
                             },
                             color:
@@ -268,6 +348,8 @@ class _UserSettingsState extends State<UserSettings> {
                             onPressed: () {
                               setState(() {
                                 unitType = 0;
+                                loadHeights(unitType);
+                                loadWeights(unitType);
                               });
                             },
                             child: Text(
@@ -311,15 +393,15 @@ class _UserSettingsState extends State<UserSettings> {
 
                       addUserData(
                           name: nameController.text,
-                          height: _selectedItem,
-                          weight: _selectedItem,
+                          height: _selectedHeight,
+                          weight: _selectedHeight,
                           birthDate: birthdate,
                           gender: genderType);
 
-                      Navigator.push(context,
+                      Navigator.pushAndRemoveUntil(context,
                           MaterialPageRoute(builder: (context) {
-                        return DashboardPage();
-                      }));
+                        return DashboardPage(email: widget.email);
+                      }), (route) => false);
                     },
                     elevation: 5.0,
                     color: Colors.black,

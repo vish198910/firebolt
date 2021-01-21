@@ -7,6 +7,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:638552741199:android:724c328e568d701814a13a",
+        "android_client_info": {
+          "package_name": "com.boltwatches.firebolt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638552741199-kkg1d3s1utltimfclmjfgiaed72o5dtc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.boltwatches.firebolt",
+            "certificate_hash": "bcb50b2c7b4c6a8e552884b81b10e93192b1e5f6"
+          }
+        },
+        {
+          "client_id": "638552741199-i8tqlkuqeijb2jrb5ddj2mrnh8h8o7iq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANKoqoMEWLNdwajeIAFngUBq3ArVAQu0g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638552741199-i8tqlkuqeijb2jrb5ddj2mrnh8h8o7iq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:638552741199:android:12175e39522fc4a514a13a",
         "android_client_info": {
           "package_name": "com.example.firebolt"

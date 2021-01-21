@@ -2,7 +2,6 @@ import 'package:firebolt/login.dart';
 import 'package:firebolt/screens/user_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:firebolt/style/color.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpPage extends StatefulWidget {
   @override

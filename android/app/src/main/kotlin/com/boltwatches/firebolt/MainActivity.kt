@@ -1,4 +1,4 @@
-package com.example.firebolt
+package com.boltwatches.firebolt
 
 import io.flutter.embedding.android.FlutterActivity
 

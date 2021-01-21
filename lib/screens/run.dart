@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebolt/services/secrets.dart';
 import 'package:firebolt/style/color.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:quiver/async.dart';
 import 'dart:math' show cos, sqrt, asin;
 
 class Run extends StatefulWidget {
@@ -66,8 +68,30 @@ class _MapViewState extends State<MapView> {
 
   bool runStarted = false;
 
-
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  int _start = 5;
+  int _current = 5;
+
+  void startTimer() {
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: _start),
+      new Duration(seconds: 1),
+    );
+
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        _current = _start - duration.elapsed.inSeconds;
+      });
+    });
+
+    sub.onDone(() {
+      print("Done");
+      _current = 5;
+      sub.cancel();
+    });
+  }
 
   // Method for retrieving the current location
   _getCurrentLocation() async {
@@ -261,7 +285,7 @@ class _MapViewState extends State<MapView> {
 
         // Calculating the total distance by adding the distance
         // between small segments
-        
+
         for (int i = 0; i < polylineCoordinates.length - 1; i++) {
           totalDistance += _coordinateDistance(
             polylineCoordinates[i].latitude,
@@ -349,6 +373,20 @@ class _MapViewState extends State<MapView> {
   void initState() {
     super.initState();
     _getCurrentLocation();
+  }
+
+  Widget gradientShaderMask({@required Widget child}) {
+    return ShaderMask(
+      shaderCallback: (bounds) => LinearGradient(
+        colors: [
+          boltPrimaryColor,
+          boltPrimaryColor.withOpacity(0.8),
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+      child: child,
+    );
   }
 
   @override

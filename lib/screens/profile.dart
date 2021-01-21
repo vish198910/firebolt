@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebolt/screens/connect_device.dart';
 import 'package:firebolt/screens/operating_instructions.dart';
 import 'package:firebolt/screens/sleep_target.dart';
 import 'package:firebolt/screens/steps_target.dart';
@@ -84,9 +85,15 @@ class _ProfileState extends State<Profile> {
             },
           ),
           GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return ConnectWatch();
+              }));
+            },
             child: ListTile(
               leading: Icon(Icons.add),
-              title: Text("Connect a device"),
+              title: Text("Connect Your Bolt"),
             ),
           ),
           GestureDetector(
@@ -113,7 +120,7 @@ class _ProfileState extends State<Profile> {
                   }
 
                   return Text(
-                      "${snapshot.data.data()["steps_target"].toString().toUpperCase()} steps",
+                      "${snapshot.data.data() != null ? snapshot.data.data()["steps_target"].toString().toUpperCase() : ''} steps",
                       style: TextStyle(color: boltPrimaryColor));
                 },
                 stream: steps,
@@ -144,8 +151,8 @@ class _ProfileState extends State<Profile> {
                   }
 
                   return Text(
-                    "${snapshot.data.data()["sleep_hours"]} Hours" +
-                        " ${snapshot.data.data()["sleep_minutes"]} Minutes",
+                    "${snapshot.data.data() != null ? snapshot.data.data()["sleep_hours"] : ''} Hours" +
+                        " ${snapshot.data.data() != null ? snapshot.data.data()["sleep_minutes"] : ''} Minutes",
                     style: TextStyle(
                       color: boltPrimaryColor,
                     ),

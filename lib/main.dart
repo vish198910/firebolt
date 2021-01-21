@@ -49,7 +49,6 @@ class _MyAppState extends State<MyApp> {
         home: Scaffold(
           body: Center(
             child: Container(
-              color: Colors.white,
               child: Text("Loading.......",
                   style: TextStyle(color: Colors.lightBlue, fontSize: 50)),
             ),

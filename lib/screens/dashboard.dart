@@ -1,17 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebolt/screens/friends.dart';
 import 'package:firebolt/screens/profile.dart';
 import 'package:firebolt/screens/run.dart';
+import 'package:firebolt/screens/steps_counter.dart';
 import 'package:firebolt/screens/today.dart';
 import 'package:firebolt/style/color.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../services/usermngmt.dart';
 
 class DashboardPage extends StatefulWidget {
-  final data;
-  DashboardPage({this.data});
+  final email;
+  DashboardPage({this.email});
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
@@ -28,6 +29,12 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
+  void openTheBox() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Hive.initFlutter();
+    await Hive.openBox<int>('steps');
+  }
+
   @override
   void initState() {
     _children = [
@@ -35,7 +42,9 @@ class _DashboardPageState extends State<DashboardPage> {
       Run(),
       Friends(),
       Profile(),
+      DailyStepsPage(),
     ];
+    openTheBox();
     super.initState();
   }
 
@@ -50,7 +59,8 @@ class _DashboardPageState extends State<DashboardPage> {
       Today(),
       Run(),
       Friends(),
-      Profile(email: widget.data.email),
+      Profile(email: widget.email),
+      DailyStepsPage(),
     ];
     return Scaffold(
       body: _children[_currentIndex],
@@ -65,6 +75,8 @@ class _DashboardPageState extends State<DashboardPage> {
               label: "Run", icon: FaIcon(FontAwesomeIcons.walking)),
           BottomNavigationBarItem(label: "Friends", icon: Icon(Icons.group)),
           BottomNavigationBarItem(label: "Me", icon: Icon(Icons.face)),
+          BottomNavigationBarItem(
+              label: "Steps", icon: FaIcon(FontAwesomeIcons.shoePrints)),
         ],
       ),
     );

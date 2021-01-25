@@ -16,7 +16,7 @@
         android:label="firebolt"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyApKLQLfdqv8IcMLJAdFtYMc0a4cghIAEQ"/>
+               android:value="AIzaSyDBou8P7iBODip2rwjhkXjm9H73hqm_c9s"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

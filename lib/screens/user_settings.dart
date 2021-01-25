@@ -47,7 +47,7 @@ class _UserSettingsState extends State<UserSettings> {
     int counter = 0;
     if (scale == 0) {
       while (counter <= 12) {
-        for (int i = 0; i < 12; i++) {
+        for (int i = 1; i < 12; i++) {
           heightItems.add(roundDouble(counter + heightValue, 1));
           heightValue += 0.1;
         }
@@ -55,7 +55,7 @@ class _UserSettingsState extends State<UserSettings> {
         heightValue = 0;
       }
     } else {
-      for (int i = 0; i < 210; i++) {
+      for (int i = 1; i < 210; i++) {
         heightItems.add(roundDouble(i * 1.0, 1));
       }
     }
@@ -69,7 +69,7 @@ class _UserSettingsState extends State<UserSettings> {
     int counter = 0;
     if (scale == 0) {
       while (counter <= 220) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i < 10; i++) {
           _weightItems.add(roundDouble(counter + weightValue, 1));
           weightValue += 0.1;
         }
@@ -78,7 +78,7 @@ class _UserSettingsState extends State<UserSettings> {
       }
     } else {
       while (counter <= 100) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i < 10; i++) {
           _weightItems.add(roundDouble(counter + weightValue, 1));
           weightValue += 0.1;
         }

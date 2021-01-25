@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "638552741199",
-    "project_id": "firebolt-7d230",
-    "storage_bucket": "firebolt-7d230.appspot.com"
+    "project_number": "798480199889",
+    "project_id": "firebolt-a7045",
+    "storage_bucket": "firebolt-a7045.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:638552741199:android:724c328e568d701814a13a",
+        "mobilesdk_app_id": "1:798480199889:android:47d33e1a1a994c3d5115f0",
         "android_client_info": {
           "package_name": "com.boltwatches.firebolt"
         }
       },
       "oauth_client": [
         {
-          "client_id": "638552741199-kkg1d3s1utltimfclmjfgiaed72o5dtc.apps.googleusercontent.com",
+          "client_id": "798480199889-sg13ce2gua0283kpg14tajdiu732bc7d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.boltwatches.firebolt",
@@ -22,57 +22,20 @@
           }
         },
         {
-          "client_id": "638552741199-i8tqlkuqeijb2jrb5ddj2mrnh8h8o7iq.apps.googleusercontent.com",
+          "client_id": "798480199889-3rv09mami1eeamahn82f388f0i37ida5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyANKoqoMEWLNdwajeIAFngUBq3ArVAQu0g"
+          "current_key": "AIzaSyDyJUush3PXmjPUx9lXlsP3HQXcWhKkUSc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "638552741199-i8tqlkuqeijb2jrb5ddj2mrnh8h8o7iq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:638552741199:android:12175e39522fc4a514a13a",
-        "android_client_info": {
-          "package_name": "com.example.firebolt"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "638552741199-mc87uk3ki0j9hc46mh6cdadr21ljls3o.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.firebolt",
-            "certificate_hash": "bcb50b2c7b4c6a8e552884b81b10e93192b1e5f6"
-          }
-        },
-        {
-          "client_id": "638552741199-i8tqlkuqeijb2jrb5ddj2mrnh8h8o7iq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyANKoqoMEWLNdwajeIAFngUBq3ArVAQu0g"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "638552741199-i8tqlkuqeijb2jrb5ddj2mrnh8h8o7iq.apps.googleusercontent.com",
+              "client_id": "798480199889-3rv09mami1eeamahn82f388f0i37ida5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -14,6 +14,9 @@ class Users extends StatefulWidget {
 class _UsersState extends State<Users> {
   TextEditingController emailController = new TextEditingController();
 
+  CollectionReference collection =
+      FirebaseFirestore.instance.collection("users");
+
   @override
   Widget build(BuildContext context) {
     Stream users = FirebaseFirestore.instance.collection('users').snapshots();
@@ -50,7 +53,12 @@ class _UsersState extends State<Users> {
                       child: document.data() != null
                           ? ListTile(
                               title: new Text(document.id),
-                              trailing: Icon(Icons.offline_share),
+                              trailing: InviteFriendWidget(
+                                requestSent: false,
+                                email: widget.email,
+                                emailToSendFriendRequest: document.id,
+                                snapshot: document,
+                              ),
                             )
                           : Center(
                               child: Container(
@@ -64,6 +72,51 @@ class _UsersState extends State<Users> {
             },
             stream: users,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class InviteFriendWidget extends StatefulWidget {
+  bool requestSent = false;
+  final email;
+  final emailToSendFriendRequest;
+  DocumentSnapshot snapshot;
+  InviteFriendWidget({
+    this.requestSent,
+    this.email,
+    this.emailToSendFriendRequest,
+    this.snapshot,
+  });
+
+  @override
+  _InviteFriendWidgetState createState() => _InviteFriendWidgetState();
+}
+
+class _InviteFriendWidgetState extends State<InviteFriendWidget> {
+  CollectionReference collection =
+      FirebaseFirestore.instance.collection("users");
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          widget.requestSent = true;
+          collection
+              .doc(widget.email)
+              .collection("invites")
+              .doc(widget.emailToSendFriendRequest)
+              .set({
+            "name": widget.snapshot.data()["name"],
+            "email": widget.emailToSendFriendRequest,
+          });
+        });
+      },
+      child: Container(
+        child: Icon(
+          Icons.offline_share,
+          color: widget.requestSent ? boltPrimaryColor : Colors.black26,
         ),
       ),
     );

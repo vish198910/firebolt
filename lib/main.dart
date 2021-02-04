@@ -32,7 +32,11 @@ class _MyAppState extends State<MyApp> {
       });
     }
   }
-
+  Future<bool> showLogo() async
+  {
+    await Future.delayed(Duration(seconds: 2));
+    return true;
+  }
   @override
   void initState() {
     initializeFlutterFire();
@@ -46,6 +50,10 @@ class _MyAppState extends State<MyApp> {
       print(_error);
       return MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Colors.black,
+          accentColor: Colors.black
+        ),
         home: Scaffold(
           body: Center(
             child: Container(
@@ -79,7 +87,22 @@ class _MyAppState extends State<MyApp> {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: userObj.handleAuth(),
-    );
+      home: FutureBuilder<bool>(
+      future: showLogo(),
+      builder:(context,AsyncSnapshot<bool>snapshot)
+      {
+        if(snapshot.hasData)
+          return  userObj.handleAuth();
+        else{
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Image.asset('images/logo.png'),
+            ),
+          );
+        
+        }  
+      }
+    ));
   }
 }

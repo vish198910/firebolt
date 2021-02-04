@@ -1,4 +1,5 @@
 import 'package:firebolt/login.dart';
+import 'package:firebolt/screens/dashboard.dart';
 import 'package:firebolt/screens/user_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:firebolt/style/color.dart';
@@ -15,7 +16,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   bool passwordVisible = false;
   bool confirmPasswordVisible = false;
-
+  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -32,159 +33,206 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.black),
-                  ),
-                  padding: EdgeInsets.all(8),
-                  child: ListTile(
-                    title: TextFormField(
-                      cursorColor: boltPrimaryColor,
-                      decoration: InputDecoration(
-                          hintText: "Enter your Email",
-                          labelText: "Email",
-                          labelStyle: TextStyle(color: boltPrimaryColor)),
-                      controller: emailController,
+          child: Form(
+            key: _formkey,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black),
                     ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: EdgeInsets.all(6),
-                  child: ListTile(
-                    title: TextFormField(
-                      cursorColor: boltPrimaryColor,
-                      controller: passwordController,
-                      obscureText: passwordVisible ? false : true,
-                      decoration: InputDecoration(
-                        hintText: "Enter your Password",
-                        labelText: "Password",
-                        labelStyle: TextStyle(color: boltPrimaryColor),
+                    padding: EdgeInsets.all(8),
+                    child: ListTile(
+                      title: TextFormField(
+                        cursorColor: boltPrimaryColor,
+                        validator: (value){
+                          if(value.isEmpty)
+                          {
+                            return "Please enter an Email";
+                          }
+                          if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value))
+                          {
+                            return "please enter an valid email";
+                          }else{
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                            hintText: "Enter your Email",
+                            labelText: "Email",
+                            labelStyle: TextStyle(color: boltPrimaryColor)),
+                        controller: emailController,
                       ),
                     ),
-                    trailing: GestureDetector(
-                      child: Icon(passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onTap: () {
-                        setState(() {
-                          if (passwordVisible) {
-                            passwordVisible = false;
-                          } else {
-                            passwordVisible = true;
-                          }
-                        });
-                      },
-                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: EdgeInsets.all(6),
-                  child: ListTile(
-                    title: TextFormField(
-                      obscureText: confirmPasswordVisible ? false : true,
-                      cursorColor: boltPrimaryColor,
-                      controller: confirmPasswordController,
-                      decoration: InputDecoration(
-                        hintText: "Enter your Password",
-                        labelText: "Confirm Password",
-                        labelStyle: TextStyle(color: boltPrimaryColor),
-                      ),
-                    ),
-                    trailing: GestureDetector(
-                      child: Icon(confirmPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onTap: () {
-                        setState(() {
-                          if (confirmPasswordVisible) {
-                            confirmPasswordVisible = false;
-                          } else {
-                            confirmPasswordVisible = true;
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              ButtonTheme(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
-                child: Padding(
+                Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return UserSettings(
-                          email: emailController.text,
-                          password: passwordController.text,
-                          confirmPassword: confirmPasswordController.text,
-                        );
-                      }));
-                    },
-                    elevation: 5.0,
-                    color: Colors.black,
-                    textColor: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                      child: Text(
-                        'Register',
-                        style: TextStyle(fontSize: 18),
-                      ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Already a user?  ",
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      GestureDetector(
-                        child: Text(
-                          "Login Here",
-                          style: TextStyle(
-                            color: boltPrimaryColor,
-                            fontSize: 15,
-                          ),
+                    padding: EdgeInsets.all(6),
+                    child: ListTile(
+                      title: TextFormField(
+                        cursorColor: boltPrimaryColor,
+                        controller: passwordController,
+                        validator: (value){
+                          if(value.isEmpty)
+                          {
+                            return "Please type a password";
+                          }
+                          if(value.length<6)
+                          {
+                            return "Password length must be 6 or more";
+                          }
+                          else{
+                            return null;
+                          }
+                        },
+                        obscureText: passwordVisible ? false : true,
+                        decoration: InputDecoration(
+                          hintText: "Enter your Password",
+                          labelText: "Password",
+                          labelStyle: TextStyle(color: boltPrimaryColor),
                         ),
+                      ),
+                      trailing: GestureDetector(
+                        child: Icon(passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off),
                         onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return LoginPage();
-                          }));
+                          setState(() {
+                            if (passwordVisible) {
+                              passwordVisible = false;
+                            } else {
+                              passwordVisible = true;
+                            }
+                          });
                         },
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    padding: EdgeInsets.all(6),
+                    child: ListTile(
+                      title: TextFormField(
+                        obscureText: confirmPasswordVisible ? false : true,
+                        cursorColor: boltPrimaryColor,
+                        controller: confirmPasswordController,
+                        validator: (value){
+                          if(value.isEmpty)
+                          {
+                            return "Please type a password";
+                          }
+                          if(value.length<6)
+                          {
+                            return "Password length must be 6 or more";
+                          }
+                          else{
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Enter your Password",
+                          labelText: "Confirm Password",
+                          labelStyle: TextStyle(color: boltPrimaryColor),
+                        ),
+                      ),
+                      trailing: GestureDetector(
+                        child: Icon(confirmPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onTap: () {
+                          setState(() {
+                            if (confirmPasswordVisible) {
+                              confirmPasswordVisible = false;
+                            } else {
+                              confirmPasswordVisible = true;
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                ButtonTheme(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      onPressed: () {
+                        if(_formkey.currentState.validate())
+                        {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          // return UserSettings(
+                          //   email: emailController.text,
+                          //   password: passwordController.text,
+                          //   confirmPassword: confirmPasswordController.text,
+                          // );
+                        // return DashboardPage(email: widget.email);
+                        // print(emailController.text);
+                        return DashboardPage(email: emailController.text);
+                        }));
+                        }
+                      },
+                      elevation: 5.0,
+                      color: Colors.black,
+                      textColor: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
+                        child: Text(
+                          'Register',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Already a user?  ",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        GestureDetector(
+                          child: Text(
+                            "Login Here",
+                            style: TextStyle(
+                              color: boltPrimaryColor,
+                              fontSize: 15,
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return LoginPage();
+                            }));
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

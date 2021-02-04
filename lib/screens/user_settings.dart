@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebolt/screens/dashboard.dart';
 import 'package:firebolt/services/usermngmt.dart';
+import 'package:firebolt/sign_up.dart';
 import 'package:firebolt/style/color.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -127,6 +128,16 @@ class _UserSettingsState extends State<UserSettings> {
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
+      builder: (BuildContext context,Widget child){
+        return Theme(
+          data: Theme.of(context).copyWith(
+          primaryColor: Colors.black,
+          accentColor: Colors.black,
+            colorScheme: ColorScheme.light(primary: Colors.black),
+        ),
+        child: child,
+        );
+      },
       initialDate: birthdate, // Refer step 1
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
@@ -169,7 +180,7 @@ class _UserSettingsState extends State<UserSettings> {
           ),
         ],
         title: Text(
-          "User Settings",
+          "Set up your Bolt",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
@@ -177,6 +188,7 @@ class _UserSettingsState extends State<UserSettings> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+
             ListTile(
               title: TextFormField(
                 cursorColor: boltPrimaryColor,
@@ -186,120 +198,6 @@ class _UserSettingsState extends State<UserSettings> {
                     labelText: "Name",
                     labelStyle: TextStyle(color: boltPrimaryColor)),
                 controller: nameController,
-              ),
-            ),
-            ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Height"),
-                  Row(
-                    children: [
-                      Text("${unitType == 0 ? " ft" : "cm"}  "),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton<double>(
-                            value: _selectedHeight,
-                            items: _dropdownHeightItems,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedHeight = value;
-                              });
-                            }),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Weight"),
-                  Row(
-                    children: [
-                      Text("${unitType == 0 ? "lb" : "kg"}  "),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton<double>(
-                            value: _selectedWeight,
-                            items: _dropdownWeightItems,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedWeight = value;
-                              });
-                            }),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                _selectDate(context);
-              },
-              child: ListTile(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Birthdate",
-                    ),
-                    Text(
-                      "${birthdate.toLocal()}".split(' ')[0],
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Gender"),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            genderType = 0;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FaIcon(
-                            FontAwesomeIcons.male,
-                            size: 40,
-                            color: genderType == -1
-                                ? Colors.grey
-                                : genderType == 0
-                                    ? boltPrimaryColor
-                                    : Colors.black,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            genderType = 1;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FaIcon(FontAwesomeIcons.female,
-                              size: 40,
-                              color: genderType == -1
-                                  ? Colors.grey
-                                  : genderType == 1
-                                      ? boltPrimaryColor
-                                      : Colors.black),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
               ),
             ),
             ListTile(
@@ -364,6 +262,128 @@ class _UserSettingsState extends State<UserSettings> {
                 ],
               ),
             ),
+            ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Height"),
+                  Row(
+                    children: [
+                      Text("${unitType == 0 ? " ft" : "cm"}  "),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<double>(
+                            value: _selectedHeight,
+                            items: _dropdownHeightItems,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedHeight = value;
+                              });
+                            }),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Weight"),
+                  Row(
+                    children: [
+                      Text("${unitType == 0 ? "lb" : "kg"}  "),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<double>(
+                            value: _selectedWeight,
+                            items: _dropdownWeightItems,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedWeight = value;
+                              });
+                            }),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Theme(
+              data: Theme.of(context).copyWith(
+                primaryColor: Colors.black,
+                accentColor: Colors.black,
+
+              ),
+                child: GestureDetector(
+                onTap: () {
+                  _selectDate(context);
+                },
+                child: ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Birthdate",
+                      ),
+                      Text(
+                        "${birthdate.toLocal()}".split(' ')[0],
+                        style:
+                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Gender"),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            genderType = 0;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FaIcon(
+                            FontAwesomeIcons.male,
+                            size: 40,
+                            color: genderType == -1
+                                ? Colors.grey
+                                : genderType == 0
+                                    ? boltPrimaryColor
+                                    : Colors.black,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            genderType = 1;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FaIcon(FontAwesomeIcons.female,
+                              size: 40,
+                              color: genderType == -1
+                                  ? Colors.grey
+                                  : genderType == 1
+                                      ? boltPrimaryColor
+                                      : Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            
             Center(
               child: ButtonTheme(
                 shape: RoundedRectangleBorder(
@@ -400,7 +420,8 @@ class _UserSettingsState extends State<UserSettings> {
 
                       Navigator.pushAndRemoveUntil(context,
                           MaterialPageRoute(builder: (context) {
-                        return DashboardPage(email: widget.email);
+                            return SignUpPage();
+                        // return DashboardPage(email: widget.email);
                       }), (route) => false);
                     },
                     elevation: 5.0,

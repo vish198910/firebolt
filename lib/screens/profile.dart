@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebolt/screens/connect_device.dart';
 import 'package:firebolt/screens/operating_instructions.dart';
@@ -6,6 +8,7 @@ import 'package:firebolt/screens/steps_target.dart';
 import 'package:firebolt/services/usermngmt.dart';
 import 'package:firebolt/style/color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile extends StatefulWidget {
@@ -17,7 +20,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   UserManagement user = new UserManagement();
-
+  FlutterBlue flutterBlue = FlutterBlue.instance;
   int targetSteps = 0;
 
   fetchSteps(email) {}
@@ -206,6 +209,100 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           GestureDetector(
+            onTap: ()=>{
+              // startScan(),
+              showDialog(
+                context: context,
+                useSafeArea: true,
+                builder: (contex){
+                  return Dialog(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height*0.6,
+                      child: Column(
+                        children: [
+                          SizedBox(height:30),
+                          Text('Finding nearby devices ...',style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 25
+                          ),),
+                          SizedBox(height:30),
+                          Expanded(
+                              child: StreamBuilder<List<ScanResult>>(
+                              stream: flutterBlue.scanResults,
+                              builder: (context,AsyncSnapshot<List<ScanResult>> snapshot){
+                                return ListView.builder(
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context,index){
+                                  return ListTile(
+                                    onTap: ()
+                                    {
+                                      print(snapshot.data[index].device.services);
+                                    },
+                                    title: Text(snapshot.data[index].device.name),
+                                  );
+                                });
+                            }),
+                          ),
+                          StreamBuilder<bool>(
+                            stream: flutterBlue.isScanning,
+                            builder: (context,AsyncSnapshot<bool>snapshot)
+                            {
+                              if(snapshot.hasData && snapshot.data ==true)
+                              {
+                              return RaisedButton(
+                                onPressed: (){
+                                  flutterBlue.startScan();
+                              },
+                              color: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+                          child: Container(
+                            width:MediaQuery.of(context).size.width*0.6,
+                            height: 50,
+                            child: Center(child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                                    ),
+                                    SizedBox(width:20),
+                                    Text('Scanning...',style: TextStyle(
+                                      fontSize: 25,
+                                      color: Colors.white
+                                    ),),
+                                  ],
+                                ))));}else{
+                                  return RaisedButton(
+                                onPressed: (){
+                                  flutterBlue.startScan(timeout: Duration(seconds: 5));
+                              },
+                              color: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+                          child: Container(
+                            width:MediaQuery.of(context).size.width*0.6,
+                            height: 50,
+                            child: Center(child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Scan',style: TextStyle(
+                                      fontSize: 25,
+                                      color: Colors.white
+                                    ),),
+                                  ],
+                                ))));
+                                }
+                              }
+                            ),
+                          SizedBox(height: 10,)
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+            },
             child: ListTile(
               leading: Icon(Icons.search),
               title: Text("Find device"),
@@ -234,4 +331,14 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+
+  // Future startScan() async {
+  //   if(await flutterBlue.isOn )
+  //   {
+  //     flutterBlue.scan(timeout: Duration(seconds:5));
+  //     flutterBlue.startScan();
+  //   }else{
+      
+  //   }
+  // }
 }

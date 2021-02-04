@@ -78,8 +78,9 @@ class _ProfileState extends State<Profile> {
                     child: CircleAvatar(
                   child: Image.asset("images/logo.png"),
                 )),
-                title: Text(
-                    "${snapshot.data.data()["name"].toString().toUpperCase()}"),
+                title: Text("${snapshot.data.data() != null ? [
+                    "name"
+                  ].toString().toUpperCase() : ""}"),
                 subtitle: Text("${widget.email}"),
               );
             },
@@ -169,6 +170,36 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           GestureDetector(
+            onTap: () {
+              showAlertDialog(BuildContext context) {
+                Widget okButton = FlatButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                );
+                AlertDialog alert = AlertDialog(
+                  backgroundColor: Colors.black,
+                  title: Text(
+                    "Device Info",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  content: Text("No Device Connected",
+                      style: TextStyle(color: Colors.white)),
+                  actions: [
+                    okButton,
+                  ],
+                );
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return alert;
+                  },
+                );
+              }
+
+              showAlertDialog(context);
+            },
             child: ListTile(
               leading: Icon(Icons.camera),
               title: Text("Shake Snapshot"),

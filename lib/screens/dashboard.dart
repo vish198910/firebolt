@@ -40,7 +40,9 @@ class _DashboardPageState extends State<DashboardPage> {
     _children = [
       Today(),
       Run(),
-      Friends(),
+      Friends(
+        email: widget.email,
+      ),
       Profile(),
       DailyStepsPage(),
     ];
@@ -58,7 +60,9 @@ class _DashboardPageState extends State<DashboardPage> {
     _children = [
       Today(),
       Run(),
-      Friends(),
+      Friends(
+        email: widget.email,
+      ),
       Profile(email: widget.email),
       DailyStepsPage(),
     ];

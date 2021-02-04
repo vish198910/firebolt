@@ -34,7 +34,7 @@ class _SleepTargetState extends State<SleepTarget> {
         .collection("fitness")
         .doc("sleepData");
 
-    Future<void> addSleep() {
+    addSleep() {
       // Call the user's CollectionReference to add a new user
       fitness.get().then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
@@ -50,7 +50,7 @@ class _SleepTargetState extends State<SleepTarget> {
                   (error) => print("Failed to add sleep Time Target: $error"));
         }
       });
-      return fitness
+      fitness
           .set({
             // Stokes and Sons
             'sleep_hours': sleepHours[_selectedHour],
@@ -171,7 +171,10 @@ class _SleepTargetState extends State<SleepTarget> {
                   padding: const EdgeInsets.fromLTRB(70, 15, 70, 15),
                   color: Colors.black,
                   textColor: Colors.white,
-                  onPressed: addSleep,
+                  onPressed: () {
+                    addSleep();
+                    Navigator.pop(context);
+                  },
                   child: Text("Confirm"),
                 ),
               ),

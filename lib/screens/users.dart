@@ -1,69 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebolt/screens/invitations.dart';
-import 'package:firebolt/screens/users.dart';
 import 'package:firebolt/style/color.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Friends extends StatefulWidget {
+class Users extends StatefulWidget {
   final email;
-  Friends({this.email});
+  Users({this.email});
   @override
-  _FriendsState createState() => _FriendsState();
+  _UsersState createState() => _UsersState();
 }
 
-class _FriendsState extends State<Friends> {
+class _UsersState extends State<Users> {
   TextEditingController emailController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    Stream friends = FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.email)
-        .collection("friends")
-        .snapshots();
+    Stream users = FirebaseFirestore.instance.collection('users').snapshots();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text("Friends"),
+        title: Text("Users"),
         centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                    return Users(
-                      email: widget.email,
-                    );
-                  }));
-                },
-                child: Icon(
-                  Icons.add_circle,
-                )),
-          ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return Invites(
-                        email: widget.email,
-                      );
-                    },
-                  ),
-                );
-              },
-              child: Icon(
-                Icons.mail,
-              ),
-            ),
-          )
-        ],
       ),
       body: Center(
         child: Container(
@@ -90,12 +49,12 @@ class _FriendsState extends State<Friends> {
                       ),
                       child: document.data() != null
                           ? ListTile(
-                              title: new Text(document.data()['name']),
-                              subtitle: new Text(document.data()['email']),
+                              title: new Text(document.id),
+                              trailing: Icon(Icons.offline_share),
                             )
                           : Center(
                               child: Container(
-                                child: Text("Add your Friends"),
+                                child: Text("Add your Users"),
                               ),
                             ),
                     ),
@@ -103,7 +62,7 @@ class _FriendsState extends State<Friends> {
                 }).toList(),
               );
             },
-            stream: friends,
+            stream: users,
           ),
         ),
       ),

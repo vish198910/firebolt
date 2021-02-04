@@ -33,6 +33,7 @@ dependencies:
   rxdart:
   cloud_firestore:
   loading: ^1.0.2
+  package_info: ^0.4.3+4
   font_awesome_flutter: ^8.11.0
   geolocator: 
   google_maps_flutter: 

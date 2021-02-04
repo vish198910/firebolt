@@ -33,14 +33,14 @@ class _StepsTargetState extends State<StepsTarget> {
       // Call the user's CollectionReference to add a new user
       fitness.get().then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
-          print('Document exists on the database');
           return fitness
               .update({
                 // Stokes and Sons
                 'steps_target': stepsList[_selectedItemIndex] // 42
               })
-              .then((value) => print("User Added"))
-              .catchError((error) => print("Failed to add user: $error"));
+              .then((value) => print("Steps Target Updated"))
+              .catchError(
+                  (error) => print("Failed to update Target Steps: $error"));
         }
       });
       return fitness
@@ -126,7 +126,10 @@ class _StepsTargetState extends State<StepsTarget> {
                   padding: const EdgeInsets.fromLTRB(70, 15, 70, 15),
                   color: Colors.black,
                   textColor: Colors.white,
-                  onPressed: addUser,
+                  onPressed: () {
+                    addUser();
+                    Navigator.pop(context);
+                  },
                   child: Text("Confirm"),
                 ),
               ),

@@ -1,5 +1,7 @@
+import 'package:firebolt/screens/faq.dart';
 import 'package:flutter/material.dart';
 import 'feedback.dart' as FeedBack;
+import 'package:package_info/package_info.dart';
 
 class OperatingInstructions extends StatefulWidget {
   final email;
@@ -10,12 +12,28 @@ class OperatingInstructions extends StatefulWidget {
 }
 
 class _OperatingInstructionsState extends State<OperatingInstructions> {
+  String version = "";
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      version = packageInfo.version;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      setState(() {
+        version = packageInfo.version;
+      });
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text("Operating Instructions"),
         backgroundColor: Colors.black,
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -28,7 +46,7 @@ class _OperatingInstructionsState extends State<OperatingInstructions> {
             child: ListTile(
               title: Text("APP"),
               leading: Icon(Icons.update),
-              trailing: Text("Latest ${widget.versionName}"),
+              trailing: Text("Latest $version"),
             ),
           ),
           GestureDetector(
@@ -38,6 +56,16 @@ class _OperatingInstructionsState extends State<OperatingInstructions> {
             ),
           ),
           GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return FAQ();
+                  },
+                ),
+              );
+            },
             child: ListTile(
               title: Text("FAQ"),
               leading: Icon(Icons.question_answer),

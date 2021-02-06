@@ -1,3 +1,4 @@
+import 'package:firebolt/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,11 +33,12 @@ class _MyAppState extends State<MyApp> {
       });
     }
   }
-  Future<bool> showLogo() async
-  {
+
+  Future<bool> showLogo() async {
     await Future.delayed(Duration(seconds: 2));
     return true;
   }
+
   @override
   void initState() {
     initializeFlutterFire();
@@ -50,15 +52,11 @@ class _MyAppState extends State<MyApp> {
       print(_error);
       return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.black,
-          accentColor: Colors.black
-        ),
         home: Scaffold(
+          backgroundColor: Colors.black,
           body: Center(
             child: Container(
-              child: Text("Loading.......",
-                  style: TextStyle(color: Colors.lightBlue, fontSize: 50)),
+              child: LOGO(),
             ),
           ),
         ),
@@ -70,39 +68,34 @@ class _MyAppState extends State<MyApp> {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
+          backgroundColor: Colors.black,
           body: Center(
-            child: Container(
-              color: Colors.white,
-              child: Text("Loading.......",
-                  style: TextStyle(color: Colors.lightBlue, fontSize: 50)),
-            ),
+            child: LOGO(),
           ),
         ),
       );
     }
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: FutureBuilder<bool>(
-      future: showLogo(),
-      builder:(context,AsyncSnapshot<bool>snapshot)
-      {
-        if(snapshot.hasData)
-          return  userObj.handleAuth();
-        else{
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: Center(
-              child: Image.asset('images/logo.png'),
-            ),
-          );
-        
-        }  
-      }
-    ));
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: new ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: FutureBuilder<bool>(
+            future: showLogo(),
+            builder: (context, AsyncSnapshot<bool> snapshot) {
+              if (snapshot.hasData)
+                return userObj.handleAuth();
+              else {
+                return Scaffold(
+                  backgroundColor: Colors.black,
+                  body: Center(
+                    child: LOGO(),
+                  ),
+                );
+              }
+            }));
   }
 }
+

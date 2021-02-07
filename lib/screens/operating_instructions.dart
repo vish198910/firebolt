@@ -1,4 +1,5 @@
 import 'package:firebolt/screens/faq.dart';
+import 'package:firebolt/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'feedback.dart' as FeedBack;
 import 'package:package_info/package_info.dart';
@@ -35,55 +36,71 @@ class _OperatingInstructionsState extends State<OperatingInstructions> {
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Container(
-            child: Center(
-              child: Container(child: Image.asset("images/logo.png")),
-            ),
-          ),
-          GestureDetector(
-            child: ListTile(
-              title: Text("APP"),
-              leading: Icon(Icons.update),
-              trailing: Text("Latest $version"),
-            ),
-          ),
-          GestureDetector(
-            child: ListTile(
-              title: Text("Instructions"),
-              leading: Icon(Icons.details),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return FAQ();
-                  },
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                  border: Border.all(
+                    width: 0.5,
+                    color: Colors.white,
+                  ),
                 ),
-              );
-            },
-            child: ListTile(
-              title: Text("FAQ"),
-              leading: Icon(Icons.question_answer),
-            ),
+                child: Center(
+                  child: LOGO(),
+                ),
+              ),
+              GestureDetector(
+                child: ListTile(
+                  title: Text("APP"),
+                  leading: Icon(Icons.update),
+                  trailing: Text("Latest $version"),
+                ),
+              ),
+              GestureDetector(
+                child: ListTile(
+                  title: Text("Instructions"),
+                  leading: Icon(Icons.details),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return FAQ();
+                      },
+                    ),
+                  );
+                },
+                child: ListTile(
+                  title: Text("FAQ"),
+                  leading: Icon(Icons.question_answer),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    return FeedBack.Feedback();
+                  }));
+                },
+                child: ListTile(
+                  title: Text("Feedback"),
+                  leading: Icon(Icons.feedback),
+                ),
+              ),
+            ],
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                return FeedBack.Feedback();
-              }));
-            },
-            child: ListTile(
-              title: Text("Feedback"),
-              leading: Icon(Icons.feedback),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

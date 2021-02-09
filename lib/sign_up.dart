@@ -48,15 +48,15 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: ListTile(
                       title: TextFormField(
                         cursorColor: boltPrimaryColor,
-                        validator: (value){
-                          if(value.isEmpty)
-                          {
+                        validator: (value) {
+                          if (value.isEmpty) {
                             return "Please enter an Email";
                           }
-                          if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value))
-                          {
+                          if (!RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value)) {
                             return "please enter an valid email";
-                          }else{
+                          } else {
                             return null;
                           }
                         },
@@ -81,16 +81,13 @@ class _SignUpPageState extends State<SignUpPage> {
                       title: TextFormField(
                         cursorColor: boltPrimaryColor,
                         controller: passwordController,
-                        validator: (value){
-                          if(value.isEmpty)
-                          {
+                        validator: (value) {
+                          if (value.isEmpty) {
                             return "Please type a password";
                           }
-                          if(value.length<6)
-                          {
+                          if (value.length < 6) {
                             return "Password length must be 6 or more";
-                          }
-                          else{
+                          } else {
                             return null;
                           }
                         },
@@ -131,16 +128,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         obscureText: confirmPasswordVisible ? false : true,
                         cursorColor: boltPrimaryColor,
                         controller: confirmPasswordController,
-                        validator: (value){
-                          if(value.isEmpty)
-                          {
+                        validator: (value) {
+                          if (value.isEmpty) {
                             return "Please type a password";
                           }
-                          if(value.length<6)
-                          {
+                          if (value.length < 6) {
                             return "Password length must be 6 or more";
-                          }
-                          else{
+                          } else {
                             return null;
                           }
                         },
@@ -174,19 +168,15 @@ class _SignUpPageState extends State<SignUpPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: RaisedButton(
                       onPressed: () {
-                        if(_formkey.currentState.validate())
-                        {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          // return UserSettings(
-                          //   email: emailController.text,
-                          //   password: passwordController.text,
-                          //   confirmPassword: confirmPasswordController.text,
-                          // );
-                        // return DashboardPage(email: widget.email);
-                        // print(emailController.text);
-                        return DashboardPage(email: emailController.text);
-                        }));
+                        if (_formkey.currentState.validate()) {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return UserSettings(
+                              email: emailController.text,
+                              password: passwordController.text,
+                              confirmPassword: confirmPasswordController.text,
+                            );
+                          }));
                         }
                       },
                       elevation: 5.0,

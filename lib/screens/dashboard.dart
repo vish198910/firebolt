@@ -58,7 +58,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     _children = [
-      Today(),
+      Today(email: widget.email),
       Run(),
       Friends(
         email: widget.email,

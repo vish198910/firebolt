@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Form(
             key: _formkey,
-                      child: Column(
+            child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -50,17 +50,16 @@ class _LoginPageState extends State<LoginPage> {
                     child: ListTile(
                       title: TextFormField(
                         cursorColor: boltPrimaryColor,
-                        validator: (value){
-                          if(value.isEmpty)
-                          {
+                        validator: (value) {
+                          if (value.isEmpty) {
                             return "Please Enter an email";
                           }
-                          if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value))
-                          {
+                          if (!RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value)) {
                             print('yes');
                             return "Please Enter a valid email";
-                          }
-                          else{
+                          } else {
                             return null;
                           }
                         },
@@ -88,13 +87,11 @@ class _LoginPageState extends State<LoginPage> {
                       title: TextFormField(
                         controller: passwordController,
                         cursorColor: boltPrimaryColor,
-                        validator: (value){
-                          if(value.isEmpty)
-                          {
+                        validator: (value) {
+                          if (value.isEmpty) {
                             return "Please enter a password";
                           }
-                          if(value.length<6)
-                          {
+                          if (value.length < 6) {
                             return "Password length must be 6 or more";
                           }
                           return null;
@@ -134,20 +131,20 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: RaisedButton(
                       onPressed: () async {
-                        if(_formkey.currentState.validate())
-                        {try {
-                          UserCredential userCredential = await FirebaseAuth
-                              .instance
-                              .signInWithEmailAndPassword(
-                                  email: emailController.text,
-                                  password: passwordController.text);
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'user-not-found') {
-                            print('No user found for that email.');
-                          } else if (e.code == 'wrong-password') {
-                            print('Wrong password provided for that user.');
+                        if (_formkey.currentState.validate()) {
+                          try {
+                            UserCredential userCredential = await FirebaseAuth
+                                .instance
+                                .signInWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text);
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'user-not-found') {
+                              print('No user found for that email.');
+                            } else if (e.code == 'wrong-password') {
+                              print('Wrong password provided for that user.');
+                            }
                           }
-                        }
                         }
                       },
                       elevation: 5.0,
@@ -182,11 +179,14 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              // return SignUpPage();
-                              return UserSettings();
-                            }));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return SignUpPage();
+                                },
+                              ),
+                            );
                           },
                         ),
                       ],

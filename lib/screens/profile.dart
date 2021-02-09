@@ -20,28 +20,24 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  UserManagement user = new UserManagement();
+  UserManagement userManage = new UserManagement();
   FlutterBlue flutterBlue = FlutterBlue.instance;
   int targetSteps = 0;
 
   fetchSteps(email) {}
+  CollectionReference users = FirebaseFirestore.instance.collection("users");
 
   @override
   Widget build(BuildContext context) {
-    Stream users = FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.email)
-        .snapshots();
+    Stream user = users.doc(widget.email).snapshots();
 
-    Stream steps = FirebaseFirestore.instance
-        .collection('users')
+    Stream steps = users
         .doc(widget.email)
         .collection("fitness")
         .doc("stepsData")
         .snapshots();
 
-    Stream sleepTime = FirebaseFirestore.instance
-        .collection('users')
+    Stream sleepTime = users
         .doc(widget.email)
         .collection("fitness")
         .doc("sleepData")
@@ -59,14 +55,14 @@ class _ProfileState extends State<Profile> {
                 child: Icon(Icons.logout),
               ),
               onTap: () {
-                user.signOut();
+                userManage.signOut();
               })
         ],
       ),
       body: Column(
         children: [
           StreamBuilder<DocumentSnapshot>(
-            stream: users,
+            stream: user,
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (snapshot.hasError) {
@@ -78,15 +74,15 @@ class _ProfileState extends State<Profile> {
               }
 
               return ListTile(
-                leading: Icon(
-                  Icons.account_box,
-                  size: 40,
-                  color: boltPrimaryColor,
+                leading: Container(
+                  child: Icon(
+                    FontAwesomeIcons.user,
+                    size: 40,
+                    color: Colors.black,
+                  ),
                 ),
                 title: Text(
-                  "${snapshot.data.data() != null ? [
-                      'name'
-                    ].toString().toUpperCase() : ""}",
+                  "${snapshot.data.data()['name']}",
                 ),
                 subtitle: Text("${widget.email}"),
               );

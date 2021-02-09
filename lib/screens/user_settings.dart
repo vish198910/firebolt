@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebolt/screens/dashboard.dart';
 import 'package:firebolt/services/usermngmt.dart';
-import 'package:firebolt/sign_up.dart';
 import 'package:firebolt/style/color.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,6 +31,8 @@ class _UserSettingsState extends State<UserSettings> {
   List<double> heightItems = [];
   List<double> _weightItems = [];
 
+  bool showLoader = true;
+
   List<DropdownMenuItem<double>> _dropdownHeightItems;
   double _selectedHeight;
   List<DropdownMenuItem<double>> _dropdownWeightItems;
@@ -48,6 +49,7 @@ class _UserSettingsState extends State<UserSettings> {
     int counter = 0;
     if (scale == 0) {
       while (counter <= 12) {
+        showLoader = true;
         for (int i = 1; i < 12; i++) {
           heightItems.add(roundDouble(counter + heightValue, 1));
           heightValue += 0.1;
@@ -55,10 +57,13 @@ class _UserSettingsState extends State<UserSettings> {
         counter++;
         heightValue = 0;
       }
+      showLoader = false;
     } else {
-      for (int i = 1; i < 210; i++) {
+      for (int i = 50; i < 200; i++) {
+        showLoader = true;
         heightItems.add(roundDouble(i * 1.0, 1));
       }
+      showLoader = false;
     }
     _dropdownHeightItems = buildHeights(heightItems);
     _selectedHeight = _dropdownHeightItems[0].value;
@@ -67,9 +72,10 @@ class _UserSettingsState extends State<UserSettings> {
   void loadWeights(int scale) async {
     _weightItems = [];
     double weightValue = 0;
-    int counter = 0;
+    int counter = 20;
     if (scale == 0) {
       while (counter <= 220) {
+        showLoader = true;
         for (int i = 1; i < 10; i++) {
           _weightItems.add(roundDouble(counter + weightValue, 1));
           weightValue += 0.1;
@@ -77,8 +83,10 @@ class _UserSettingsState extends State<UserSettings> {
         counter++;
         weightValue = 0;
       }
+      showLoader = false;
     } else {
       while (counter <= 100) {
+        showLoader = true;
         for (int i = 1; i < 10; i++) {
           _weightItems.add(roundDouble(counter + weightValue, 1));
           weightValue += 0.1;
@@ -86,6 +94,7 @@ class _UserSettingsState extends State<UserSettings> {
         counter++;
         weightValue = 0;
       }
+      showLoader = false;
     }
     _dropdownWeightItems = buildWeights(_weightItems);
     _selectedWeight = _dropdownWeightItems[0].value;
@@ -128,14 +137,14 @@ class _UserSettingsState extends State<UserSettings> {
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      builder: (BuildContext context,Widget child){
+      builder: (BuildContext context, Widget child) {
         return Theme(
           data: Theme.of(context).copyWith(
-          primaryColor: Colors.black,
-          accentColor: Colors.black,
+            primaryColor: Colors.black,
+            accentColor: Colors.black,
             colorScheme: ColorScheme.light(primary: Colors.black),
-        ),
-        child: child,
+          ),
+          child: child,
         );
       },
       initialDate: birthdate, // Refer step 1
@@ -171,14 +180,6 @@ class _UserSettingsState extends State<UserSettings> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        actions: [
-          GestureDetector(
-            onTap: () {
-              userManagement.signOut();
-            },
-            child: Icon(Icons.logout),
-          ),
-        ],
         title: Text(
           "Set up your Bolt",
           style: TextStyle(color: Colors.white),
@@ -188,7 +189,6 @@ class _UserSettingsState extends State<UserSettings> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             ListTile(
               title: TextFormField(
                 cursorColor: boltPrimaryColor,
@@ -312,9 +312,8 @@ class _UserSettingsState extends State<UserSettings> {
               data: Theme.of(context).copyWith(
                 primaryColor: Colors.black,
                 accentColor: Colors.black,
-
               ),
-                child: GestureDetector(
+              child: GestureDetector(
                 onTap: () {
                   _selectDate(context);
                 },
@@ -327,8 +326,8 @@ class _UserSettingsState extends State<UserSettings> {
                       ),
                       Text(
                         "${birthdate.toLocal()}".split(' ')[0],
-                        style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -383,7 +382,6 @@ class _UserSettingsState extends State<UserSettings> {
                 ],
               ),
             ),
-            
             Center(
               child: ButtonTheme(
                 shape: RoundedRectangleBorder(
@@ -420,8 +418,7 @@ class _UserSettingsState extends State<UserSettings> {
 
                       Navigator.pushAndRemoveUntil(context,
                           MaterialPageRoute(builder: (context) {
-                            return SignUpPage();
-                        // return DashboardPage(email: widget.email);
+                        return DashboardPage(email: widget.email);
                       }), (route) => false);
                     },
                     elevation: 5.0,

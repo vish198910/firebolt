@@ -78,7 +78,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Bolt Watches',
         theme: new ThemeData(
           primarySwatch: Colors.blue,
         ),

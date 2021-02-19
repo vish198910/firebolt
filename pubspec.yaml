@@ -55,6 +55,7 @@ dependencies:
   shared_preferences:
   google_fonts:
   hive_flutter:
+  http: ^0.12.2
 
 
 dev_dependencies:

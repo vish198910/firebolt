@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebolt/screens/dashboard.dart';
+import 'package:firebolt/services/secrets.dart';
 import 'package:firebolt/services/usermngmt.dart';
 import 'package:firebolt/style/color.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:math';
+import "package:http/http.dart" as http;
 
 class UserSettings extends StatefulWidget {
   final data;
@@ -173,6 +177,36 @@ class _UserSettingsState extends State<UserSettings> {
         "gender": gender == 0 ? "Male" : "Female",
       },
     );
+  }
+
+  addAppTag() async {   
+    var client = http.Client();
+    try {
+      var baseUrl = '${Secrets.FIXED_URL}';
+      var response = await client.get(baseUrl + "//${Secrets.CUSTOMERS}");
+      var jsonBody = json.decode(response.body);
+      var customers = jsonBody["customers"];
+      for (int i = 0; i < customers.length; i++) {
+        if (customers[i]["email"] == widget.email) {
+          print(customers[i]);
+          var tagsUrl = baseUrl + "customers/${customers[i]["id"]}.json";
+          var newResponse = await client.put(tagsUrl,
+              headers: {"Content-Type": "application/json"},
+              body: jsonEncode(
+                {
+                  "customer": {
+                    "id": customers[i]["id"],
+                    "tags": "Signed up for App",
+                  },
+                },
+              ),
+              encoding: Encoding.getByName('utf-8'));
+          print(newResponse.statusCode);
+        }
+      }
+    } finally {
+      client.close();
+    }
   }
 
   @override
@@ -415,6 +449,8 @@ class _UserSettingsState extends State<UserSettings> {
                           weight: _selectedHeight,
                           birthDate: birthdate,
                           gender: genderType);
+
+                      addAppTag();
 
                       Navigator.pushAndRemoveUntil(context,
                           MaterialPageRoute(builder: (context) {

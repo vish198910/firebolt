@@ -14,6 +14,13 @@ class Today extends StatefulWidget {
 
 class _TodayState extends State<Today> {
   double _currentSliderValue = 20;
+
+  
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

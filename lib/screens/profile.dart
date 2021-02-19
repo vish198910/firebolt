@@ -1,16 +1,17 @@
+import 'dart:convert';
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebolt/screens/connect_device.dart';
 import 'package:firebolt/screens/operating_instructions.dart';
 import 'package:firebolt/screens/sleep_target.dart';
 import 'package:firebolt/screens/steps_target.dart';
+import 'package:firebolt/services/secrets.dart';
 import 'package:firebolt/services/usermngmt.dart';
 import 'package:firebolt/style/color.dart';
-import 'package:firebolt/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import "package:http/http.dart" as http;
 
 class Profile extends StatefulWidget {
   final email;
@@ -26,6 +27,42 @@ class _ProfileState extends State<Profile> {
 
   fetchSteps(email) {}
   CollectionReference users = FirebaseFirestore.instance.collection("users");
+
+  addAppTag() async {
+    var client = http.Client();
+    try {
+      var baseUrl = '${Secrets.FIXED_URL}';
+      var response = await client.get(baseUrl + "//${Secrets.CUSTOMERS}");
+      var jsonBody = json.decode(response.body);
+      var customers = jsonBody["customers"];
+      for (int i = 0; i < customers.length; i++) {
+        if (customers[i]["email"] == widget.email) {
+          print(customers[i]);
+          var tagsUrl = baseUrl + "customers/${customers[i]["id"]}.json";
+          var newResponse = await client.put(tagsUrl,
+              headers: {"Content-Type": "application/json"},
+              body: jsonEncode(
+                {
+                  "customer": {
+                    "id": customers[i]["id"],
+                    "tags": "Signed up for App",
+                  },
+                },
+              ),
+              encoding: Encoding.getByName('utf-8'));
+          print(newResponse.statusCode);
+        }
+      }
+    } finally {
+      client.close();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    addAppTag();
+  }
 
   @override
   Widget build(BuildContext context) {
